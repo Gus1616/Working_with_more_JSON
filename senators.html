@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang = "en">
+    
+<head>
+<meta charset="utf-8">
+<!-- <link rel="stylesheet" href="css_dashboard.css"> -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+    
+<body>
+
+<h1 style="text-decoration: underline overline; font-size: 40px;">Senators</h1>
+
+<p>Total Number of Democrats= <span id="NoDem"></span></p>
+
+<p>Total Number of Republicans= <span id="NoRep"></span></p>
+
+<p>Total Number of Independents= <span id="INDRep"></span></p>
+
+
+<div class="container">
+    <table  class="table table-hover">
+        <thead>
+            <tr>
+            <th>Leadership title</th>
+            <th>Name</th>
+            <th>Party</th>
+            </tr>
+        </thead>
+        <tbody id="SenTable">
+
+        </tbody>
+        
+    
+    </table>
+</div>
+
+<!-- <input type="text" id="myInput" onkeyup="searchParty()" placeholder="Search for party.." title="Type in a party">
+<input type="text" id="myInputState" onkeyup="searchState()" placeholder="Search for a state.." title="Type in a state"> -->
+
+  <table id="AllSenTable" class="table table-hover">
+    <thead>
+    <tr>
+      <th><input onkeyup="filterTable()" placeholder="Party... "></th>
+      <th><input onkeyup="filterTable()" placeholder="Name..."></th>
+      <th><input onkeyup="filterTable()" placeholder="State..."></th>
+      <th><input onkeyup="filterTable()" placeholder="Gender..."></th>
+      <th><input onkeyup="filterTable()" placeholder="Rank..."></th>
+    </tr>
+  </thead>
+    <tbody id="TBodyAllSenTable">
+
+    </tbody>
+    
+    
+  </table>
+
+
+    
+
+<script>
+    
+//global variables
+let vaccinationData = [];
+var countyData=[];
+    
+let featuresArray = [];
+
+
+
+//vacination data
+var xmlhttp = new XMLHttpRequest();
+var url = "senators.json";
+
+xmlhttp.onreadystatechange = function() {
+    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+        
+        vaccinationData = JSON.parse(xmlhttp.responseText);
+        
+        myfunction(vaccinationData);
+        appendJson(vaccinationData);
+        appendAll(vaccinationData.objects);
+
+
+
+        
+ 
+    }
+// error handling
+    else {xmlhttp.onerror = function() {
+  console.error('An error occurred fetching the JSON from ' + url);};}
+};
+
+xmlhttp.open("GET", url, true);
+xmlhttp.send();
+
+function myfunction(arr){
+    // vaccinationData = arr;
+    // console.log("m",arr.objects[0].party)
+    var Demcount = 0;
+    var Repcount = 0;
+    var INDcount = 0;
+
+
+    for(let i = 0; i < arr.objects.length; i++) {
+        // console.log(arr.objects[i].party);
+
+        if (arr.objects[i].party == 'Democrat'){
+            Demcount += 1;
+
+        } else if (arr.objects[i].party == 'Republican'){
+            Repcount += 1;
+            
+        } else if (arr.objects[i].party == 'Independent'){
+            INDcount += 1;
+            
+        }
+
+}
+
+document.getElementById("NoDem").innerHTML= Demcount;
+document.getElementById("NoRep").innerHTML= Repcount;
+document.getElementById("INDRep").innerHTML= INDcount;
+
+
+
+
+
+
+}
+    
+
+function appendJson(data){
+
+   
+    let dataSort = data.objects.sort((a, b) => {
+        if (a.party == 'Democrat') {
+            return -1;
+        }
+    });
+
+    let dataSortAgain = dataSort.sort((a, b) => {
+        if (a.leadership_title != null) {
+            return -1;
+        }
+    });
+    // console.log(dataSort)
+    var table = document.getElementById('SenTable');
+    // console.log(data.objects);
+    dataSort.forEach(function(object) {
+        if (object.leadership_title != null) {
+                // console.log(object.person)
+                var tr = document.createElement('tr');
+                tr.innerHTML = '<td>' + object.leadership_title + '</td>' +
+                '<td>' + (object.person.firstname + ' ' + object.person.lastname) + '</td>' +
+                '<td>' + object.party + '</td>';
+                table.appendChild(tr);
+            }
+            });
+
+
+}
+
+
+function appendAll(data){
+
+    var table = document.getElementById('TBodyAllSenTable');
+    // console.log(data.objects);
+    data.forEach(function(object) {
+                // console.log(object.person)
+                var tr = document.createElement('tr');
+                tr.innerHTML = '<td>' + object.party + '</td>' +
+                '<td>' + (object.person.firstname + ' ' + object.person.lastname) + '</td>' +
+                '<td>' + object.state + '</td>'+ '<td>' + object.person.gender + '</td>' + '<td>' + object.senator_rank + '</td>';
+                table.appendChild(tr);
+            
+            });
+
+}
+
+function searchParty() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("AllSenTable");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[0];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+function searchState() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("myInputState");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("AllSenTable");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[2];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+
+function filterTable() {
+  const query = q => document.querySelectorAll(q);
+  const filters = [...query('th input')].map(e => new RegExp(e.value, 'i'));
+
+  query('tbody tr').forEach(row => row.style.display = 
+    filters.every((f, i) => f.test(row.cells[i].textContent)) ? '' : 'none');
+}
+    
+    
+
+
+
+
+    
+</script>
+
+
+</body> 
+    
+</html>
