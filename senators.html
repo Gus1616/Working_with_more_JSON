@@ -42,6 +42,8 @@
   padding: 10px;
   margin-top: 30px;
   border-radius: 8px;
+  box-shadow: 4px 4px;
+
 
 
   
@@ -54,6 +56,8 @@
   margin-top: 30px;
   margin-bottom: 40px;
   border-radius:8px;
+  box-shadow: 4px 4px;
+
 
 
   
@@ -67,6 +71,7 @@
   display:block;
   border: 3px solid green;
   border-radius: 8px;
+  box-shadow: 4px 4px;
 
 
 }
@@ -284,17 +289,14 @@ function myFunction2(object) {
                   var x = document.getElementById("myDIV");
                   if (x.style.display === "none") {
                     x.style.display = "block";
-                    document.getElementById("listTwo").innerHTML = '<li>' + object.extra.office + '</li>';
-                    document.getElementById("listThree").innerHTML = '<li>' + object.person.birthday + '</li>';
-                    document.getElementById("listFour").innerHTML = '<li>' + object.person.startdate + '</li>';
-                    document.getElementById("listFive").innerHTML = '<li>' + object.person.twitterid + ' ' +  object.person.youtubeid + '</li>';
-                    document.getElementById("listSix").innerHTML = '<li>' + object.website + '</li>';
+                    document.getElementById("listTwo").innerHTML = '<li>' + 'Address: ' + object.extra.office + '</li>';
+                    document.getElementById("listThree").innerHTML = '<li>' + 'Birthday: ' + object.person.birthday + '</li>';
+                    document.getElementById("listFour").innerHTML = '<li>' + 'Start Date: ' + object.person.startdate + '</li>';
+                    document.getElementById("listFive").innerHTML = '<li>' + 'Twitter: ' + object.person.twitterid + ' '+ 'YouTube: ' +  object.person.youtubeid + '</li>';
+                    document.getElementById("listSix").innerHTML = '<li>' +  "<a href='"+ object.website +"'target='blank'>Website</a>" + '</li>';
 
 
-
-                    // x.innerHTML = object.extra.office;
-                    // x.innerHTML = object.person.birthday;
-                    // x.innerHTML = object.startdate;
+                
 
                     
 
