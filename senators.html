@@ -71,6 +71,20 @@
 
 }
 
+#myDIV {
+  width: 300px;
+  padding: 40px 0;
+  text-align: center;
+  display: none;
+  border: 3px solid green;
+  border-radius: 8px;
+  position: absolute;
+  margin-left: 35px;
+
+  /* float: right; */
+  top: 50%;
+}
+
 
   </style>
 </head>
@@ -116,7 +130,18 @@
 </table>
 </div>
 
+<div id="myDIV">
+  <ul id="listTwo"></ul>
+  <ul id="listThree"></ul>
+  <ul id="listFour"></ul>
+  <ul id="listFive"></ul>
+  <ul id="listSix"></ul>
+  
 
+ 
+ 
+  
+  </div>
     
 
 <script>
@@ -225,12 +250,19 @@ function appendAll(data){
     var table = document.getElementById('TBodyAllSenTable');
     // console.log(data.objects);
     data.forEach(function(object) {
+                
                 // console.log(object.person)
                 var tr = document.createElement('tr');
+                
                 tr.innerHTML = '<td>' + object.party + '</td>' +
                 '<td>' + (object.person.firstname + ' ' + object.person.lastname) + '</td>' +
-                '<td>' + object.state + '</td>'+ '<td>' + object.person.gender + '</td>' + '<td>' + object.senator_rank + '</td>' +'<td>' + '<a onclick="myFunction()">Click Me</a>' + '</td>';
+              '<td>' + object.state + '</td>'+ '<td>' + object.person.gender + '</td>' + '<td>' + object.senator_rank + '</td>' +'<td>' + "<button onclick='myFunction2()'>More Info</button>" + '</td>';
+              var button = tr.querySelector('button')
+button.onclick = function () {
+  myFunction2(object)
+}
                 table.appendChild(tr);
+                
             
             });
 
@@ -246,8 +278,32 @@ function filterTable() {
   query('tbody tr').forEach(row => row.style.display = 
     filters.every((f, i) => f.test(row.cells[i].textContent)) ? '' : 'none');
 }
+
+function myFunction2(object) {
+                  console.log(object.party)
+                  var x = document.getElementById("myDIV");
+                  if (x.style.display === "none") {
+                    x.style.display = "block";
+                    document.getElementById("listTwo").innerHTML = '<li>' + object.extra.office + '</li>';
+                    document.getElementById("listThree").innerHTML = '<li>' + object.person.birthday + '</li>';
+                    document.getElementById("listFour").innerHTML = '<li>' + object.person.startdate + '</li>';
+                    document.getElementById("listFive").innerHTML = '<li>' + object.person.twitterid + ' ' +  object.person.youtubeid + '</li>';
+                    document.getElementById("listSix").innerHTML = '<li>' + object.website + '</li>';
+
+
+
+                    // x.innerHTML = object.extra.office;
+                    // x.innerHTML = object.person.birthday;
+                    // x.innerHTML = object.startdate;
+
+                    
+
+                  } else {
+                    x.style.display = "none";
+                  }
+}
     
-    
+
 
 
 
